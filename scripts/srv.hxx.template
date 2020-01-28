@@ -21,8 +21,7 @@ cpp_class = spec.short_name
 cpp_full_name = cpp_namespace+cpp_class
 }@
 
-#ifndef @(spec.package.upper())_MESSAGE_@(spec.short_name.upper())_H
-#define @(spec.package.upper())_MESSAGE_@(spec.short_name.upper())_H
+#pragma once
 
 #include <miniros/traits/service_traits.h>
 
@@ -30,8 +29,8 @@ cpp_full_name = cpp_namespace+cpp_class
 @# Generate Request and Response Messages
 @###############################################
 
-#include <@(spec.package)/@(spec.short_name)Request.h>
-#include <@(spec.package)/@(spec.short_name)Response.h>
+#include <@(spec.package)/@(spec.short_name)Request.hxx>
+#include <@(spec.package)/@(spec.short_name)Response.hxx>
 
 @###############################################
 @# Service Struct
@@ -137,5 +136,3 @@ struct DataType< @(cpp_full_name)Response>
 
 } // namespace service_traits
 } // namespace miniros
-
-#endif // @(spec.package.upper())_MESSAGE_@(spec.short_name.upper())_H

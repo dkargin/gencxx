@@ -1,5 +1,5 @@
 install(
-  FILES msg.h.template srv.h.template
+  FILES msg.hxx.template srv.hxx.template
   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION})
 
 catkin_install_python(

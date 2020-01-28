@@ -83,7 +83,7 @@ def msg_type_to_cpp(type):
         if (array_len is None):
             return 'std::vector<%s, typename ContainerAllocator::template rebind<%s>::other > '%(cpp_type, cpp_type)
         else:
-            return 'boost::array<%s, %s> '%(cpp_type, array_len)
+            return 'std::array<%s, %s> '%(cpp_type, array_len)
     else:
         return cpp_type
 

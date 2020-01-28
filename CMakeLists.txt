@@ -10,6 +10,7 @@ catkin_package(
 
 add_subdirectory(scripts)
 
+message(STATUS "Genmsg destination: ${GENMSG_LANGS_DESTINATION}")
 file(WRITE ${CATKIN_DEVEL_PREFIX}/${GENMSG_LANGS_DESTINATION}/gencxx "Pure C++")
 install(FILES ${CATKIN_DEVEL_PREFIX}/${GENMSG_LANGS_DESTINATION}/gencxx
   DESTINATION ${GENMSG_LANGS_DESTINATION})

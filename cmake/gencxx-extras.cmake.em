@@ -1,11 +1,11 @@
 @[if DEVELSPACE]@
 # bin and template dir variables in develspace
-set(GENCPP_BIN "@(CMAKE_CURRENT_SOURCE_DIR)/scripts/gen_cxx.py")
-set(GENCPP_TEMPLATE_DIR "@(CMAKE_CURRENT_SOURCE_DIR)/scripts")
+set(GENCXX_BIN "@(CMAKE_CURRENT_SOURCE_DIR)/scripts/gen_cxx.py")
+set(GENCXX_TEMPLATE_DIR "@(CMAKE_CURRENT_SOURCE_DIR)/scripts")
 @[else]@
 # bin and template dir variables in installspace
-set(GENCPP_BIN "${gencxx_DIR}/../../../@(CATKIN_PACKAGE_BIN_DESTINATION)/gen_cxx.py")
-set(GENCPP_TEMPLATE_DIR "${gencxx_DIR}/..")
+set(GENCXX_BIN "${gencxx_DIR}/../../../@(CATKIN_PACKAGE_BIN_DESTINATION)/gen_cxx.py")
+set(GENCXX_TEMPLATE_DIR "${gencxx_DIR}/..")
 @[end if]@
 
 # Generate .msg->.hxx for cpp
@@ -26,35 +26,35 @@ macro(_generate_msg_cxx ARG_PKG ARG_MSG ARG_IFLAGS ARG_MSG_DEPS ARG_GEN_OUTPUT_D
     # Do nothing. The header will be installed by the user.
   else()
     # check if a user-provided plugin header file exists
-    if(EXISTS "${PROJECT_SOURCE_DIR}/include/${ARG_PKG}/plugin/${MSG_SHORT_NAME}.hxx")
-      message(STATUS "${ARG_PKG}: Found user-provided plugin header '${PROJECT_SOURCE_DIR}/include/${ARG_PKG}/plugin/${MSG_SHORT_NAME}.hxx' for message '${ARG_PKG}/${MSG_SHORT_NAME}'.")
+    if(EXISTS "${PROJECT_SOURCE_DIR}/include_cxx/${ARG_PKG}/plugin/${MSG_SHORT_NAME}.hxx")
+      message(STATUS "${ARG_PKG}: Found user-provided plugin header '${PROJECT_SOURCE_DIR}/include_cxx/${ARG_PKG}/plugin/${MSG_SHORT_NAME}.hxx' for message '${ARG_PKG}/${MSG_SHORT_NAME}'.")
       # Add a file dependency to enforce regeneration if the plugin header was added after initial cmake invocation.
       # Even with --force-cmake the generator would otherwise not run if the .msg file did not change.
-      set(MSG_PLUGIN "${PROJECT_SOURCE_DIR}/include/${ARG_PKG}/plugin/${MSG_SHORT_NAME}.hxx")
+      set(MSG_PLUGIN "${PROJECT_SOURCE_DIR}/include_cxx/${ARG_PKG}/plugin/${MSG_SHORT_NAME}.hxx")
     else()
       set(MSG_PLUGIN)
     endif()
 
     assert(CATKIN_ENV)
     add_custom_command(OUTPUT ${GEN_OUTPUT_FILE}
-      DEPENDS ${GENCPP_BIN} ${ARG_MSG} ${ARG_MSG_DEPS} ${MSG_PLUGIN} "${GENCPP_TEMPLATE_DIR}/msg.h.template" ${ARGN}
-      COMMAND ${CATKIN_ENV} ${PYTHON_EXECUTABLE} ${GENCPP_BIN} ${ARG_MSG}
+      DEPENDS ${GENCXX_BIN} ${ARG_MSG} ${ARG_MSG_DEPS} ${MSG_PLUGIN} "${GENCXX_TEMPLATE_DIR}/msg.hxx.template" ${ARGN}
+      COMMAND ${CATKIN_ENV} ${PYTHON_EXECUTABLE} ${GENCXX_BIN} ${ARG_MSG}
       ${ARG_IFLAGS}
       -p ${ARG_PKG}
       -o ${ARG_GEN_OUTPUT_DIR}
-      -e ${GENCPP_TEMPLATE_DIR}
-      COMMENT "Generating C++ code from ${ARG_PKG}/${MSG_NAME}"
+      -e ${GENCXX_TEMPLATE_DIR}
+      COMMENT "Generating Modern C++ code from ${ARG_PKG}/${MSG_NAME}"
       WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
       )
-    list(APPEND ALL_GEN_OUTPUT_FILES_cpp ${GEN_OUTPUT_FILE})
+    list(APPEND ALL_GEN_OUTPUT_FILES_cxx ${GEN_OUTPUT_FILE})
   endif()
 
-  gencpp_append_include_dirs()
+  gencxx_append_include_dirs()
 endmacro()
 
 #gencpp uses the same program to generate srv and msg files, so call the same macro
 macro(_generate_srv_cxx ARG_PKG ARG_SRV ARG_IFLAGS ARG_MSG_DEPS ARG_GEN_OUTPUT_DIR)
-  _generate_msg_cxx(${ARG_PKG} ${ARG_SRV} "${ARG_IFLAGS}" "${ARG_MSG_DEPS}" ${ARG_GEN_OUTPUT_DIR} "${GENCPP_TEMPLATE_DIR}/srv.h.template")
+  _generate_msg_cxx(${ARG_PKG} ${ARG_SRV} "${ARG_IFLAGS}" "${ARG_MSG_DEPS}" ${ARG_GEN_OUTPUT_DIR} "${GENCXX_TEMPLATE_DIR}/srv.hxx.template")
 endmacro()
 
 macro(_generate_module_cxx)

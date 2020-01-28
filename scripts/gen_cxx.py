@@ -40,8 +40,8 @@ import sys
 import os
 import genmsg.template_tools
 
-msg_template_map = { 'msg.h.template':'@NAME@.hxx' }
-srv_template_map = { 'srv.h.template':'@NAME@.hxx' }
+msg_template_map = { 'msg.hxx.template':'@NAME@.hxx' }
+srv_template_map = { 'srv.hxx.template':'@NAME@.hxx' }
 
 if __name__ == "__main__":
     genmsg.template_tools.generate_from_command_line_options(sys.argv,

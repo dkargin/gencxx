@@ -50,11 +50,11 @@ has_plugin = os.path.exists('include/%s/plugin/%s.h' % (spec.package, spec.short
 for field in spec.parsed_fields():
   if (not field.is_builtin):
     if (field.is_header):
-      print('#include <std_msgs/Header.h>')
+      print('#include <std_msgs/Header.hxx>')
     else:
       (package, name) = genmsg.names.package_resource_name(field.base_type)
       package = package or spec.package # convert '' to package
-      print('#include <%s/%s.h>'%(package, name))
+      print('#include <%s/%s.hxx>'%(package, name))
 }@
 @##############################
 @# Plugin
