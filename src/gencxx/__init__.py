@@ -51,8 +51,8 @@ MSG_TYPE_TO_CPP = {'byte': 'int8_t',
                    'float32': 'float',
                    'float64': 'double',
                    'string': 'std::basic_string<char, std::char_traits<char>, typename ContainerAllocator::template rebind<char>::other > ',
-                   'time': 'ros::Time',
-                   'duration': 'ros::Duration'}
+                   'time': 'miniros::Time',
+                   'duration': 'miniros::Duration'}
 
 #used
 def msg_type_to_cpp(type):
@@ -221,7 +221,7 @@ def generate_fixed_length_assigns(spec, container_gets_allocator, cpp_name_prefi
                 (cpp_msg_unqualified, cpp_msg_with_alloc, _) = cpp_message_declarations(cpp_name_prefix, field.base_type)
                 yield '    %s.assign(%s(_alloc));\n'%(field.name, cpp_msg_with_alloc)
         elif (len(val) > 0):
-            yield '    %s.assign(%s);\n'%(field.name, val)
+            yield '    %s.fill(%s);\n'%(field.name, val)
 
 #used
 def generate_initializer_list(spec, container_gets_allocator):
