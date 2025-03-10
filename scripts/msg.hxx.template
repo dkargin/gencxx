@@ -38,6 +38,7 @@ has_plugin = os.path.exists('include/%s/plugin/%s.h' % (spec.package, spec.short
 #include <vector>
 #include <map>
 #include <array>
+#include <memory>
 
 #include <miniros/types.h>
 #include <miniros/serialization.h>
