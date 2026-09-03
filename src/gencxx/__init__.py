@@ -30,6 +30,8 @@
 # ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
+import os
+
 import genmsg.msgs
 
 try:
@@ -86,6 +88,35 @@ def msg_type_to_cpp(type):
             return 'std::array<%s, %s> '%(cpp_type, array_len)
     else:
         return cpp_type
+
+def source_comment_path(file_name_in, package=None):
+    """Return a relative path safe to embed in generated headers.
+
+    Absolute prefixes (home directories, workspaces, install roots) are
+    stripped so generated files do not leak machine-specific locations.
+    When *package* appears as a directory component, the result starts
+    there (``geometry_msgs/msg/Point.msg``).
+    """
+    if not file_name_in:
+        return package or ''
+
+    path = os.path.normpath(str(file_name_in)).replace('\\', '/')
+    if len(path) >= 2 and path[1] == ':':
+        path = path[2:]
+    parts = [p for p in path.split('/') if p and p != '.']
+
+    if package:
+        for i in range(len(parts) - 1, -1, -1):
+            if parts[i] == package:
+                return '/'.join(parts[i:])
+        if parts:
+            return '%s/%s' % (package, parts[-1])
+        return package
+
+    if len(parts) > 3:
+        parts = parts[-3:]
+    return '/'.join(parts)
+
 
 def _escape_string(s):
     s = s.replace('\\', '\\\\')
