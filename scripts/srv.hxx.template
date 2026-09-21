@@ -24,6 +24,7 @@ cpp_full_name = cpp_namespace+cpp_class
 
 #pragma once
 
+#include <miniros/serialization.h>
 #include <miniros/traits/service_traits.h>
 
 @###############################################
@@ -137,3 +138,22 @@ struct DataType< @(cpp_full_name)Response>
 
 } // namespace service_traits
 } // namespace miniros
+
+#ifdef MINIROS_DECLARE_ALLINONE_KV_SERIALIZER
+namespace miniros { namespace serialization {
+
+  template<>
+  struct KVSerializer< @(cpp_full_name) >
+  {
+    template<typename Storage, typename T> inline static void allInOne(Storage& storage, T m)
+    {
+      storage.element("request", m.request);
+      storage.element("response", m.response);
+    }
+
+    MINIROS_DECLARE_ALLINONE_KV_SERIALIZER
+  }; // struct KVSerializer
+
+} // namespace serialization
+} // namespace miniros
+#endif
